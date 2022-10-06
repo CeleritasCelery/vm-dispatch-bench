@@ -1,61 +1,3 @@
-mod matches {
-    struct State {
-        count: usize,
-    }
-
-    fn func1(s: &mut State) {
-        s.count += 1;
-    }
-
-    fn func2(s: &mut State) {
-        s.count += 2;
-    }
-
-    fn func3(s: &mut State) {
-        s.count += 3;
-    }
-
-    fn func4(s: &mut State) {
-        s.count += 4;
-    }
-
-    fn func_return() {
-        // do nothing
-    }
-
-    pub(crate) enum Ops {
-        Func1,
-        Func2,
-        Func3,
-        Func4,
-        FuncReturn,
-    }
-
-    #[rustfmt::skip]
-    pub(crate) fn get_values() -> Vec<Ops> {
-        vec![Ops::Func1, Ops::Func2, Ops::Func3, Ops::Func4,
-             Ops::Func1, Ops::Func2, Ops::Func3, Ops::Func4,
-             Ops::Func1, Ops::Func2, Ops::Func3, Ops::Func4,
-             Ops::Func1, Ops::Func2, Ops::Func3, Ops::Func4,
-             Ops::Func1, Ops::Func2, Ops::Func3, Ops::Func4,
-             Ops::FuncReturn]
-    }
-
-    pub(crate) fn run_vm(vm: &[Ops]) -> usize {
-        let s = &mut State { count: 0 };
-        for op in vm {
-            match op {
-                Ops::Func1 => func1(s),
-                Ops::Func2 => func2(s),
-                Ops::Func3 => func3(s),
-                Ops::Func4 => func4(s),
-                Ops::FuncReturn => func_return(),
-            }
-        }
-        s.count
-    }
-}
-
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 fn bench_match_vm(c: &mut Criterion) {
@@ -131,6 +73,64 @@ mod fnptr {
             functions,
         };
         s.next_func();
+        s.count
+    }
+}
+
+mod matches {
+    struct State {
+        count: usize,
+    }
+
+    fn func1(s: &mut State) {
+        s.count += 1;
+    }
+
+    fn func2(s: &mut State) {
+        s.count += 2;
+    }
+
+    fn func3(s: &mut State) {
+        s.count += 3;
+    }
+
+    fn func4(s: &mut State) {
+        s.count += 4;
+    }
+
+    fn func_return() {
+        // do nothing
+    }
+
+    pub(crate) enum Ops {
+        Func1,
+        Func2,
+        Func3,
+        Func4,
+        FuncReturn,
+    }
+
+    #[rustfmt::skip]
+    pub(crate) fn get_values() -> Vec<Ops> {
+        vec![Ops::Func1, Ops::Func2, Ops::Func3, Ops::Func4,
+             Ops::Func1, Ops::Func2, Ops::Func3, Ops::Func4,
+             Ops::Func1, Ops::Func2, Ops::Func3, Ops::Func4,
+             Ops::Func1, Ops::Func2, Ops::Func3, Ops::Func4,
+             Ops::Func1, Ops::Func2, Ops::Func3, Ops::Func4,
+             Ops::FuncReturn]
+    }
+
+    pub(crate) fn run_vm(vm: &[Ops]) -> usize {
+        let s = &mut State { count: 0 };
+        for op in vm {
+            match op {
+                Ops::Func1 => func1(s),
+                Ops::Func2 => func2(s),
+                Ops::Func3 => func3(s),
+                Ops::Func4 => func4(s),
+                Ops::FuncReturn => func_return(),
+            }
+        }
         s.count
     }
 }
